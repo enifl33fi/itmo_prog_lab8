@@ -76,8 +76,16 @@ public class TablePageLogic extends WorkingWindowAdapter {
     @Override
     public void goBack(){
         dataSynchronizer.setWork(false);
+        model.clearSortAndFilter();
         model.dispose();
         client.loadStartPage();
+    }
+    @Override
+    public void goFurther(){
+        dataSynchronizer.setWork(false);
+        model.clearSortAndFilter();
+        model.dispose();
+        client.loadVisualizationPage();
     }
     public void setData(LinkedList<CollectionPart> data){
         model.setData(data);

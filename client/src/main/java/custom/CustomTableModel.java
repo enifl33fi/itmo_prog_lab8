@@ -203,4 +203,10 @@ public class CustomTableModel extends AbstractTableModel {
     public void setDataCopy(){
         this.dataCopy = new ArrayList<>(data);
     }
+    public void clearTableMod(){
+        filteredFields.clear();
+        dataCopy = null;
+        sortedColumn = -1;
+        sortOrder = SortOrder.ASCENDING;
+    }
 }

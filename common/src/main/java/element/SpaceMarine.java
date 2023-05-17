@@ -4,6 +4,7 @@ import exceptions.NullFieldException;
 import exceptions.WrongFieldException;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class SpaceMarine implements CollectionPart {
     private long
@@ -239,5 +240,22 @@ public class SpaceMarine implements CollectionPart {
     @Override
     public void setId(long id){
         this.id = id;
+    }
+    @Override
+    public boolean equals(Object obj){
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        SpaceMarine spaceMarine = (SpaceMarine) obj;
+        return spaceMarine.getId() == this.getId()
+                && spaceMarine.getOwner().equals(this.getOwner())
+                && spaceMarine.getCreationDate().equals(this.getCreationDate())
+                && spaceMarine.getName().equals(this.getName())
+                && spaceMarine.getCoordinates().equals(this.getCoordinates())
+                && Objects.equals(spaceMarine.getHealth(), this.getHealth())
+                && spaceMarine.getHeartCount() == this.getHeartCount()
+                && spaceMarine.getCategory() == this.getCategory()
+                && spaceMarine.getMeleeWeapon() == this.getMeleeWeapon()
+                && spaceMarine.getChapter().equals(this.getChapter());
     }
 }

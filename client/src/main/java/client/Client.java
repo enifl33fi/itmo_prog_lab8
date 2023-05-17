@@ -1,5 +1,7 @@
 package client;
 
+import GUI.VisualizationPage.VisualizationPageLogic;
+import GUI.VisualizationPage.VisualizationPageModel;
 import GUI.WorkingWindow;
 import GUI.entering.EnteringLogic;
 import GUI.registration.RegistrationLogic;
@@ -27,6 +29,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Client {
     private static final Logger LOGGER= LogManager.getLogger(Client.class);
@@ -48,6 +51,8 @@ public class Client {
     private StartPageLogic startPageLogic;
     private EnteringLogic enteringLogic;
     private TablePageLogic tablePageLogic;
+    private VisualizationPageLogic visualizationPageLogic;
+    private final ReentrantLock reentrantLock = new ReentrantLock();
 
 
     public Client(RequestManager requestManager, InputHandler inputHandler) {
@@ -62,6 +67,7 @@ public class Client {
         this.enteringLogic = new EnteringLogic(this);
         this.registrationLogic = new RegistrationLogic(this);
         this.tablePageLogic = new TablePageLogic(this);
+        this.visualizationPageLogic = new VisualizationPageLogic(this);
         startPageLogic.setIt();
     }
 
@@ -159,6 +165,7 @@ public class Client {
                 this.sendReqGetRes(result);
             }
             else {
+                reentrantLock.lock();
                 try {
                     this.sendRequest(req);
 
@@ -178,8 +185,11 @@ public class Client {
                     LOGGER.error(e.getMessage());
                 } catch (TimeLimitException e) {
                     curWorkingWindow.raiseDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
                     LOGGER.error(e.getMessage());
                     this.channel = this.reconnect();
+                } finally {
+                    reentrantLock.unlock();
                 }
             }
         }
@@ -188,42 +198,48 @@ public class Client {
 
     public void sendReqGetRes(StringBuilder result) {
         String lineArr = inputHandler.getLine();
-        while (lineArr != null) {
-            try {
-                Request req = this.getRequest(lineArr);
-                if (req.getCommandType() == CommandType.EXECUTE_SCRIPT) {
-                    this.inputHandler.getCommands(req.getArg(), result);
-                } else {
-                    this.sendRequest(req);
-                    Response res = this.getResponse(1);
-                    int packageCount = res.getPackageCount();
-                    if (packageCount > 1) {
-                        res = this.getResponse(packageCount);
+        reentrantLock.lock();
+        try {
+            while (lineArr != null) {
+                try {
+                    Request req = this.getRequest(lineArr);
+                    if (req.getCommandType() == CommandType.EXECUTE_SCRIPT) {
+                        this.inputHandler.getCommands(req.getArg(), result);
+                    } else {
+                        this.sendRequest(req);
+                        Response res = this.getResponse(1);
+                        int packageCount = res.getPackageCount();
+                        if (packageCount > 1) {
+                            res = this.getResponse(packageCount);
+                        }
+                        result.append(res.getResponseLine());
+                        result.append(System.lineSeparator());
                     }
-                    result.append(res.getResponseLine());
-                    result.append(System.lineSeparator());
-                }
 
-            }catch (WrongFieldException | NullFieldException | WrongCommandException | MaxRecursionDepthException |
-                    InterruptedException e) {
-                result.append(e.getMessage());
-                result.append(System.lineSeparator());
-            } catch (IllegalArgumentException e) {
-                result.append("Wrong argument");
-                result.append(System.lineSeparator());
-            } catch (NullPointerException | IndexOutOfBoundsException e) {
-                result.append("Unknown command");
-                result.append(System.lineSeparator());
-            } catch (IOException e) {
-                result.append("Failed to exchange data with server");
-                result.append(System.lineSeparator());
-                this.channel = this.reconnect();
-            } catch (TimeLimitException e) {
-                result.append(e.getMessage());
-                result.append(System.lineSeparator());
-                this.channel = this.reconnect();
+                } catch (WrongFieldException | NullFieldException | WrongCommandException | MaxRecursionDepthException |
+                         InterruptedException e) {
+                    result.append(e.getMessage());
+                    result.append(System.lineSeparator());
+                } catch (IllegalArgumentException e) {
+                    result.append("Wrong argument");
+                    result.append(System.lineSeparator());
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
+                    result.append("Unknown command");
+                    result.append(System.lineSeparator());
+                } catch (IOException e) {
+                    result.append("Failed to exchange data with server");
+                    result.append(System.lineSeparator());
+                    this.channel = this.reconnect();
+                } catch (TimeLimitException e) {
+                    result.append(e.getMessage());
+                    result.append(System.lineSeparator());
+                    this.channel = this.reconnect();
+                }
+                lineArr = inputHandler.getLine();
+                ;
             }
-            lineArr = inputHandler.getLine();;
+        } finally {
+            reentrantLock.unlock();
         }
         curWorkingWindow.raiseDialog(result.toString(), JOptionPane.INFORMATION_MESSAGE);
     }
@@ -232,6 +248,7 @@ public class Client {
             req.setUserContainer(userContainer);
         }
         Response res = new Response("Internal server error.");
+        reentrantLock.lock();
         try{
             this.sendRequest(req);
             res = this.getResponse(1);
@@ -244,6 +261,8 @@ public class Client {
         } catch (TimeLimitException e){
             LOGGER.error(e.getMessage());
             this.channel = this.reconnect();
+        } finally {
+            reentrantLock.unlock();
         }
         return res;
     }
@@ -319,4 +338,9 @@ public class Client {
         tablePageLogic.setIt();
         curWorkingWindow = tablePageLogic;
     }
+    public void loadVisualizationPage(){
+        visualizationPageLogic.setIt();
+        curWorkingWindow = visualizationPageLogic;
+    }
+
 }

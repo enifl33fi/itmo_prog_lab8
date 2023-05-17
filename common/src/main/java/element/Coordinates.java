@@ -33,4 +33,12 @@ public class Coordinates implements Serializable {
     public void setY(int y) {
         this.y = y;
     }
+    public boolean equals(Object obj){
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Coordinates coordinates = (Coordinates) obj;
+        return coordinates.getX() == this.getX()
+                && coordinates.getY() == this.getY();
+    }
 }

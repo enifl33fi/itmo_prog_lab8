@@ -5,8 +5,6 @@ import element.CollectionPart;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -45,7 +43,7 @@ public class TablePageModel extends JFrame{
                 if (!isEditingMode){
                     isEditingMode = true;
                     logic.setTableUpdate(false);
-                    setComponentsVisible();
+                    setComponentsAccess();
                 }
             }
         });
@@ -83,7 +81,7 @@ public class TablePageModel extends JFrame{
             customTableModel.saveChanges();
             isEditingMode = false;
             logic.setTableUpdate(true);
-            setComponentsVisible();
+            setComponentsAccess();
         });
         cancelButton.addActionListener((e) -> {
             if (dataTable.isEditing()) {
@@ -92,8 +90,9 @@ public class TablePageModel extends JFrame{
             customTableModel.returnToBackUp();
             isEditingMode = false;
             logic.setTableUpdate(true);
-            setComponentsVisible();
+            setComponentsAccess();
         });
+        visualizationButton.addActionListener((e) -> logic.goFurther());
         dataTable.getTableHeader().setReorderingAllowed(false);
     }
     private void createUIComponents() {
@@ -107,11 +106,13 @@ public class TablePageModel extends JFrame{
         customUserZone.setUserName(login);
         customTableModel.setCurUser(login);
     }
-    private void setComponentsVisible(){
+    private void setComponentsAccess(){
         removeButton.setVisible(!isEditingMode);
         filterButton.setVisible(!isEditingMode);
         namePartField.setVisible(!isEditingMode);
         backButton.setVisible(!isEditingMode);
+        customUserZone.getLogOutButton().setEnabled(!isEditingMode);
+        visualizationButton.setEnabled(!isEditingMode);
         cancelButton.setVisible(isEditingMode);
         okButton.setVisible(isEditingMode);
     }
@@ -132,5 +133,7 @@ public class TablePageModel extends JFrame{
     protected Object[] getChangedElements(int row){
         return customTableModel.getRow(row);
     }
-
+    protected void clearSortAndFilter(){
+        customTableModel.clearTableMod();
+    }
 }

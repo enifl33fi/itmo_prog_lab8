@@ -39,4 +39,13 @@ public class Chapter implements Serializable {
     public void setMarinesCount(Integer marinesCount) {
         this.marinesCount = marinesCount;
     }
+    @Override
+    public boolean equals(Object obj){
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Chapter chapter = (Chapter) obj;
+        return chapter.getName().equals(this.getName())
+                && chapter.getMarinesCount().equals(this.getMarinesCount());
+    }
 }

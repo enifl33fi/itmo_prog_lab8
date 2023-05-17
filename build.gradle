@@ -1,19 +1,104 @@
-plugins {
-    id 'java'
+project(':server') {
+    apply plugin: 'application'
+    application {
+        mainClass = 'server.Main'
+    }
+    dependencies {
+        implementation project(':common')
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.19.0'
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
+        implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+
+    }
+    mainClassName = 'server.Main'
+
+    jar {
+        duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+        manifest {
+            attributes "Main-Class": "$mainClassName"
+        }
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+
+
+project(':client') {
+    apply plugin: 'application'
+    application {
+        mainClass = 'client.Main'
+    }
+    configurations {
+        antTask1
+    }
+    dependencies {
+        implementation project(':common')
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.19.0'
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
+        implementation 'com.jetbrains.intellij.java:java-gui-forms-rt:231.8770.71'
+        antTask1 'com.jetbrains.intellij.java:java-compiler-ant-tasks:231.8770.71'
+    }
+    mainClassName = 'client.Main'
+
+    jar {
+        duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+        manifest {
+            attributes "Main-Class": "$mainClassName"
+        }
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+    task compileJava(type: JavaCompile, overwrite: true, dependsOn: configurations.implementation.getTaskDependencyFromProjectDependency(true, 'jar')) {
+        doLast {
+            project.sourceSets.main.output.classesDirs.each { project.mkdir(it) }
+            ant.taskdef name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.antTask1.asPath
+            ant.javac2 srcdir: project.sourceSets.main.java.srcDirs.join(':'),
+                    classpath: project.sourceSets.main.compileClasspath.asPath,
+                    destdir: project.sourceSets.main.output.classesDirs[0],
+                    source: sourceCompatibility,
+                    target: targetCompatibility,
+                    includeAntRuntime: false
+        }
+    }
+
+
+}
+project(':common'){
+    apply plugin: 'java'
+    dependencies {
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    }
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
+allprojects{
+    apply plugin: 'java'
 
-test {
-    useJUnitPlatform()
+    group 'ru.ifmo.se'
+    version '1.0.0'
+
+    repositories {
+        mavenCentral()
+        maven { url "https://www.jetbrains.com/intellij-repository/releases" }
+        maven { url "https://cache-redirector.jetbrains.com/intellij-dependencies" }
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
 }

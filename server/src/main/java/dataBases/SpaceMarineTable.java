@@ -3,6 +3,7 @@ package dataBases;
 import element.*;
 
 import java.sql.*;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -128,6 +129,7 @@ public class SpaceMarineTable {
             while (rs.next()){
                 spaceMarineCol.add(this.getElem(rs));
             }
+            spaceMarineCol.sort(Comparator.comparingLong(CollectionPart::getId));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

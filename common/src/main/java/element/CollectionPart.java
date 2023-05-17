@@ -44,5 +44,7 @@ public interface CollectionPart extends Comparable<CollectionPart>, Serializable
     String getOwner();
 
     void setId(long id);
+    @Override
+    boolean equals(Object obj);
 
 }
