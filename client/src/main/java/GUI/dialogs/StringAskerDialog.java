@@ -7,6 +7,7 @@ import network.requests.Request;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 public class StringAskerDialog extends JDialog implements SizedWindow {
     private JPanel contentPane;
@@ -18,6 +19,7 @@ public class StringAskerDialog extends JDialog implements SizedWindow {
     public StringAskerDialog(Request request) {
         req = request;
         setContentPane(contentPane);
+        switchLanguage();
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
         namePartField.setBackground(contentPane.getBackground());
@@ -56,6 +58,16 @@ public class StringAskerDialog extends JDialog implements SizedWindow {
     }
     private void createUIComponents() {
         namePartField = new CustomTextField("name part");
+    }
+    private void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        namePartField.setHelpMsg(r.getString("field") +r.getString("nameField"));
+        buttonOK.setText(r.getString("okButton"));
+        buttonCancel.setText(r.getString("cancelButton"));
     }
 
 }

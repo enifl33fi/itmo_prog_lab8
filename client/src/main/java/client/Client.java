@@ -1,7 +1,6 @@
 package client;
 
 import GUI.VisualizationPage.VisualizationPageLogic;
-import GUI.VisualizationPage.VisualizationPageModel;
 import GUI.WorkingWindow;
 import GUI.entering.EnteringLogic;
 import GUI.registration.RegistrationLogic;
@@ -244,7 +243,7 @@ public class Client {
         curWorkingWindow.raiseDialog(result.toString(), JOptionPane.INFORMATION_MESSAGE);
     }
     public Response sendReqGetRes(Request req){
-        if (req.getUserContainer() == null){
+        if (req.getUserContainer() == null || this.userContainer != null){
             req.setUserContainer(userContainer);
         }
         Response res = new Response("Internal server error.");
@@ -252,6 +251,10 @@ public class Client {
         try{
             this.sendRequest(req);
             res = this.getResponse(1);
+            int packageCount = res.getPackageCount();
+            if (packageCount > 1) {
+                res = this.getResponse(packageCount);
+            }
             return res;
         } catch (IOException e) {
             LOGGER.error("Failed to exchange data with server");

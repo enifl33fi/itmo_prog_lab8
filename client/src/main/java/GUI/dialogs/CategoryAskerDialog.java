@@ -7,6 +7,7 @@ import network.requests.Request;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 public class CategoryAskerDialog extends JDialog implements SizedWindow {
     private JPanel contentPane;
@@ -17,6 +18,7 @@ public class CategoryAskerDialog extends JDialog implements SizedWindow {
 
     public CategoryAskerDialog(Request request) {
         req = request;
+        switchLanguage();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -56,5 +58,14 @@ public class CategoryAskerDialog extends JDialog implements SizedWindow {
     private void createUIComponents() {
         categoryComboBox = new JComboBox<>(Arrays.stream(AstartesCategory.values()).map(AstartesCategory::toString).toArray());
         categoryComboBox.addItem("");
+    }
+    private void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        buttonOK.setText(r.getString("okButton"));
+        buttonCancel.setText(r.getString("cancelButton"));
     }
 }

@@ -40,7 +40,7 @@ public class PaintComponent {
     }
 
     public void setxCoordinate(int xCoordinate) {
-        this.xCoordinate = xCoordinate;
+        this.xCoordinate = xCoordinate + size/2;
     }
 
     public int getyCoordinate() {
@@ -48,10 +48,16 @@ public class PaintComponent {
     }
 
     public void setyCoordinate(int yCoordinate) {
-        this.yCoordinate = yCoordinate;
+        this.yCoordinate = yCoordinate + size/2;
     }
 
     public int getPrefSize() {
         return prefSize;
+    }
+    public boolean isSelected(int xMouse, int yMouse){
+        return getDistance(xMouse, yMouse) <= size/2;
+    }
+    public double getDistance(int xMouse, int yMouse){
+        return Math.sqrt(Math.pow(xMouse - xCoordinate, 2) + Math.pow(yMouse - yCoordinate, 2));
     }
 }

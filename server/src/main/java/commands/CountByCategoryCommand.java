@@ -2,8 +2,6 @@ package commands;
 
 import collections.InteractiveCollection;
 import collections.UsersCollection;
-import dataBases.DataBasesManager;
-import element.AstartesCategory;
 import general.validator.GeneralValidator;
 import network.Response;
 import network.requests.Request;

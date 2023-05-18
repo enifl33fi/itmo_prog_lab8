@@ -10,6 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class EnteringModel extends JFrame{
     private JPanel enteringPanel;
@@ -22,7 +23,7 @@ public class EnteringModel extends JFrame{
 
     public EnteringModel(EnteringLogic enteringLogic){
         this.logic = enteringLogic;
-        setSize(500, 300);
+        setSize(500, 400);
         logic.setSettings(this, enteringPanel, "enter");
         loginField.setBackground(enteringPanel.getBackground());
         firstPasswordField.setBackground(enteringPanel.getBackground());
@@ -84,5 +85,16 @@ public class EnteringModel extends JFrame{
     }
     protected JPanel getPanel(){
         return enteringPanel;
+    }
+    public void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.RegOrEnter");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        signInButton.setText(r.getString("signInButton"));
+        backButton.setText(r.getString("backButton"));
+        loginField.setHelpMsg(r.getString("field") + r.getString("loginName"));
+        firstPasswordField.setHelpMsg(r.getString("field") + r.getString("passwordName"));
     }
 }

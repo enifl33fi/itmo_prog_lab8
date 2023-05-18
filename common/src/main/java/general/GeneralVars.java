@@ -3,6 +3,8 @@ package general;
 
 import inputWorkers.InputHandler;
 
+import java.util.Locale;
+
 /**
  * Class for storing some basic variables and objects.
  * @author Kirill Markov
@@ -31,8 +33,17 @@ public class GeneralVars {
      * Name of required system variable.
      */
     public static final String SYSTEM_VARIABLE = "FILE_LAB5_PATH";
+    private static Locale locale;
 
     private final InputHandler inputHandler = new InputHandler();
+
+    public static Locale getLocale() {
+        return locale;
+    }
+
+    public static void setLocale(Locale locale) {
+        GeneralVars.locale = locale;
+    }
 
     public InputHandler getInputHandler() {
         return this.inputHandler;

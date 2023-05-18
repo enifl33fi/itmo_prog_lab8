@@ -1,6 +1,5 @@
 package GUI.entering;
 
-import GUI.WorkingWindow;
 import GUI.WorkingWindowAdapter;
 import client.Client;
 import custom.CustomPasswordField;
@@ -8,8 +7,6 @@ import custom.CustomTextField;
 import exceptions.NullFieldException;
 import exceptions.WrongFieldException;
 import general.validator.GeneralValidator;
-
-import javax.swing.*;
 
 public class EnteringLogic extends WorkingWindowAdapter {
     private final EnteringModel model = new EnteringModel(this);
@@ -50,6 +47,7 @@ public class EnteringLogic extends WorkingWindowAdapter {
     }
     @Override
     public void setIt(){
+        model.switchLanguage();
         model.setVisible(true);
     }
     @Override

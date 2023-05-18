@@ -2,7 +2,6 @@ package GUI.tablePage;
 
 import GUI.ArgumentType;
 import GUI.DataSynchronizer;
-import GUI.WorkingWindow;
 import GUI.WorkingWindowAdapter;
 import GUI.dialogs.CategoryAskerDialog;
 import GUI.dialogs.ElementAskerDialog;
@@ -15,18 +14,13 @@ import element.CollectionPart;
 import element.SpaceMarine;
 import exceptions.NullFieldException;
 import general.validator.GeneralValidator;
-import network.Response;
 import network.requests.RemoveByIdRequest;
 import network.requests.Request;
-import network.requests.ShowRequest;
 import network.requests.UpdateRequest;
 
-import javax.swing.*;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TablePageLogic extends WorkingWindowAdapter {
     private TablePageModel model = new TablePageModel(this);
@@ -51,12 +45,13 @@ public class TablePageLogic extends WorkingWindowAdapter {
             case CATEGORY -> new CategoryAskerDialog(req);
             case STRING -> new StringAskerDialog(req);
             case ID -> new IdAskerDialog(req, this);
-            case ELEMENT -> new ElementAskerDialog(req);
+            case ELEMENT -> new ElementAskerDialog(req, null);
 
         }
     }
     @Override
     public void setIt(){
+        model.switchLanguage();
         dataSynchronizer = new DataSynchronizer(client, this);
         dataSynchronizer.setWork(true);
         synchThread = new Thread(dataSynchronizer);

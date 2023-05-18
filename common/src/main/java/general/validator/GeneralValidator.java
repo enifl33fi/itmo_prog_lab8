@@ -8,41 +8,51 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class GeneralValidator extends AbstractValidator {
     public String validateName(String name) {
-        return validateString(name, "name", false);
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        return validateString(name, rElem.getString("nameField"), false);
     }
 
     public int validateX(String xStr) {
-        int x = validateInteger(xStr, "x", false);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        int x = validateInteger(xStr, rElem.getString("xCoordinateField"), false);
         if (x > 201) {
-            throw new WrongFieldException("value of x <= 201");
+            throw new WrongFieldException(r.getString("xValueException"));
         }
         return x;
     }
 
     public int validateY(String yStr) {
-        int y = validateInteger(yStr, "y", false);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        int y = validateInteger(yStr, rElem.getString("yCoordinateField"), false);
         if (y <= -440) {
-            throw new WrongFieldException("value of y > -440.");
+            throw new WrongFieldException(r.getString("yValueException"));
         }
         return y;
     }
 
     public Double validateHealth(String healthStr) {
-        Double health = validateDouble(healthStr, "health", true);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        Double health = validateDouble(healthStr, rElem.getString("healthField"), true);
         if (health != null && health <= 0) {
-            throw new WrongFieldException("value of health > 0");
+            throw new WrongFieldException(r.getString("healthValueException"));
         }
         return health;
     }
 
     public int validateHeartCount(String heartCountStr) {
-        int heartCount = validateInteger(heartCountStr, "heart count", false);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        int heartCount = validateInteger(heartCountStr, rElem.getString("heartCountField"), false);
         if (heartCount <= 0 || heartCount > 3) {
-            throw new WrongFieldException("value of 0 < heartCount <= 3");
+            throw new WrongFieldException(r.getString("heartCountValueException"));
         }
         return heartCount;
     }
@@ -55,6 +65,7 @@ public class GeneralValidator extends AbstractValidator {
         return category;
     }
     public MeleeWeapon validateMeleeWeapon(String meleeWeaponStr) {
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
         MeleeWeapon meleeWeapon = null;
         if (meleeWeaponStr == null || meleeWeaponStr.equals("") || meleeWeaponStr.equals("null")) {
             return meleeWeapon;
@@ -63,17 +74,21 @@ public class GeneralValidator extends AbstractValidator {
         return meleeWeapon;
     }
     public String validateChapterName(String chapterName) {
-        return validateString(chapterName, "chapter name", false);
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        return validateString(chapterName, rElem.getString("chapterNameField"), false);
     }
     public Integer validateMarinesCount(String marinesCountStr) {
-        Integer marinesCount = validateInteger(marinesCountStr, "marines count", false);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        Integer marinesCount = validateInteger(marinesCountStr, rElem.getString("marinesCountField"), false);
         if (marinesCount <= 0 || marinesCount > 1000) {
-            throw new WrongFieldException("value of 0 < marinesCount <= 1000");
+            throw new WrongFieldException(r.getString("marinesCountValueException"));
         }
         return marinesCount;
     }
     public long validateId(String idStr, List<Long> ids) {
-        long id = Long.parseLong(idStr);
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        long id = validateLong(idStr, rElem.getString("idField"), false);
 //        if (ids.contains(id)) {
 //            throw new IdCollapseException();
 //        }
@@ -83,21 +98,27 @@ public class GeneralValidator extends AbstractValidator {
         return validateLong(idStr, "id", false);
     }
     public Date validateCreationDate(String creationDateStr) throws ParseException {
-        return validateDate(creationDateStr, "creation date");
+        ResourceBundle rElem = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        return validateDate(creationDateStr, rElem.getString("creationDateField"));
     }
     public String validateLogin(String login){
-        login = validateString(login, "login", false);
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        ResourceBundle rLogin = ResourceBundle.getBundle("GUI.bundles.RegOrEnter");
+        login = validateString(login, rLogin.getString("loginName"), false);
         if (!Pattern.matches("\\w+", login)){
-            throw new WrongFieldException("Only word characters [a-zA-Z_0-9].");
+            throw new WrongFieldException(r.getString("formatException"));
         }
         return login;
     }
     public String validatePassword(char[] passwordSecure){
-        return validateString(String.valueOf(passwordSecure), "password", false);
+        ResourceBundle rLogin = ResourceBundle.getBundle("GUI.bundles.RegOrEnter");
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+        return validateString(String.valueOf(passwordSecure), rLogin.getString("passwordName"), false);
     }
     public void validateSecondPassword(char[] passwordSecureTwo, char[] passwordSecure){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
         if (!(Arrays.equals(passwordSecureTwo, passwordSecure))){
-            throw new WrongFieldException("passwords doesn't match");
+            throw new WrongFieldException(r.getString("PasswordNotMatchException"));
         }
     }
     public SpaceMarine validateSpaceMarine(

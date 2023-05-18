@@ -4,6 +4,7 @@ import GUI.SizedWindow;
 import custom.CustomField;
 import custom.CustomTextField;
 import element.AstartesCategory;
+import element.CollectionPart;
 import element.MeleeWeapon;
 import exceptions.NullFieldException;
 import exceptions.WrongFieldException;
@@ -18,6 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 public class ElementAskerDialog extends JDialog implements SizedWindow {
     private JPanel contentPane;
@@ -38,8 +40,9 @@ public class ElementAskerDialog extends JDialog implements SizedWindow {
     private final Request req;
     private final String[] givenValues = new String[GeneralVars.USERS_VAR_COUNT];
 
-    public ElementAskerDialog(Request request) {
+    public ElementAskerDialog(Request request, CollectionPart readyElem) {
         req = request;
+        switchLanguage();
         givenValues[5] = categoryComboBox.getSelectedItem().toString();
         givenValues[6] = weaponComboBox.getSelectedItem().toString();
         setContentPane(contentPane);
@@ -190,6 +193,9 @@ public class ElementAskerDialog extends JDialog implements SizedWindow {
         weaponComboBox.addActionListener((e) -> getComboBoxValue(weaponComboBox, 6));
         pack();
         setToCenter(this);
+        if (readyElem != null){
+            setFields(readyElem);
+        }
         setVisible(true);
     }
 
@@ -296,5 +302,38 @@ public class ElementAskerDialog extends JDialog implements SizedWindow {
             }
         }
         return true;
+    }
+    public void setFields(CollectionPart elem){
+        nameField.setHint(false);
+        xCoordinateField.setHint(false);
+        yCoordinateField.setHint(false);
+        heartCountField.setHint(false);
+        chapterNameField.setHint(false);
+        marinesCountField.setHint(false);
+        nameField.getInputField().setText(elem.getName());
+        xCoordinateField.getInputField().setText(String.valueOf(elem.getCoordinates().getX()));
+        yCoordinateField.getInputField().setText(String.valueOf(elem.getCoordinates().getY()));
+        healthField.getInputField().setText(elem.getHealth() != null ? elem.getHealth().toString():"");
+        heartCountField.getInputField().setText(String.valueOf(elem.getHeartCount()));
+        categoryComboBox.setSelectedItem(elem.getCategory() != null ? elem.getCategory().toString():"");
+        weaponComboBox.setSelectedItem(elem.getMeleeWeapon() != null ? elem.getMeleeWeapon().toString():"");
+        chapterNameField.getInputField().setText(elem.getChapter().getName());
+        marinesCountField.getInputField().setText(String.valueOf(elem.getChapter().getMarinesCount()));
+    }
+    private void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        nameField.setHelpMsg(r.getString("field") +r.getString("nameField"));
+        xCoordinateField.setHelpMsg(r.getString("field") + r.getString("xCoordinateField"));
+        yCoordinateField.setHelpMsg(r.getString("field")+ r.getString("yCoordinateField"));
+        healthField.setHelpMsg(r.getString("field")+ r.getString("healthField"));
+        heartCountField.setHelpMsg(r.getString("field")+ r.getString("heartCountField"));
+        chapterNameField.setHelpMsg(r.getString("field")+ r.getString("chapterNameField"));
+        marinesCountField.setHelpMsg(r.getString("field")+ r.getString("marinesCountField"));
+        buttonOK.setText(r.getString("okButton"));
+        buttonCancel.setText(r.getString("cancelButton"));
     }
 }

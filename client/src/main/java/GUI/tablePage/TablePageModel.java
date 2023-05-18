@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class TablePageModel extends JFrame{
     private JPanel tablePagePanel;
@@ -60,7 +61,6 @@ public class TablePageModel extends JFrame{
             int row = dataTable.getSelectedRow();
             if (row != -1){
                 logic.doRemove(customTableModel.getRow(row)[0].toString());
-                customTableModel.removeRow(row);
             }
         });
         filterButton.addActionListener(e -> {
@@ -135,5 +135,19 @@ public class TablePageModel extends JFrame{
     }
     protected void clearSortAndFilter(){
         customTableModel.clearTableMod();
+    }
+    public void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.TablePage");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        cancelButton.setText(r.getString("cancelButton"));
+        okButton.setText(r.getString("okButton"));
+        filterButton.setText(r.getString("filterButton"));
+        removeButton.setText(r.getString("removeButton"));
+        backButton.setText(r.getString("backButton"));
+        visualizationButton.setText(r.getString("visualizationButton"));
+
     }
 }

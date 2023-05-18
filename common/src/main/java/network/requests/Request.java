@@ -7,7 +7,6 @@ import exceptions.WrongCommandException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 
 public abstract class Request implements Serializable {
     private CommandType commandType;

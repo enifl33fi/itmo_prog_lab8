@@ -10,6 +10,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class RegistrationModel extends JFrame {
     private JPanel registrationPanel;
@@ -22,7 +24,7 @@ public class RegistrationModel extends JFrame {
     private final ArrayList<CustomField> checkFields = new ArrayList<>();
 
     public RegistrationModel(RegistrationLogic registrationLogic){
-        setSize(500, 300);
+        setSize(500, 400);
         this.logic = registrationLogic;
         logic.setSettings(this, registrationPanel, "registration");
         loginField.setBackground(registrationPanel.getBackground());
@@ -105,6 +107,19 @@ public class RegistrationModel extends JFrame {
     }
     protected JPanel getPanel(){
         return registrationPanel;
+    }
+    public void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.RegOrEnter");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        signUpButton.setText(r.getString("signUpButton"));
+        backButton.setText(r.getString("backButton"));
+        loginField.setHelpMsg(r.getString("field") + r.getString("loginName"));
+        firstPasswordField.setHelpMsg(r.getString("field") + r.getString("passwordName"));
+        secondPasswordField.setHelpMsg(r.getString("field") + r.getString("passwordAgainName"));
+
     }
 
 }

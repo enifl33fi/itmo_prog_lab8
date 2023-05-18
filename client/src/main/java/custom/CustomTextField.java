@@ -75,4 +75,7 @@ public class CustomTextField extends JPanel implements CustomField{
         inputField.setForeground(Color.GRAY);
         inputField.setText(inputFieldName);
     }
+    public void setHelpMsg(String helpString){
+        helpMsg.setText(helpString);
+    }
 }

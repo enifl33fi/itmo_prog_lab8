@@ -111,4 +111,7 @@ public class CustomPasswordField extends JPanel implements CustomField{
             inputField.setEchoChar('*');
         }
     }
+    public void setHelpMsg(String helpString){
+        helpMsg.setText(helpString);
+    }
 }

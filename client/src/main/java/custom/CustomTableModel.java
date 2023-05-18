@@ -48,7 +48,10 @@ public class CustomTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data.get(rowIndex)[columnIndex];
+        if (getDataSize() > rowIndex){
+            return data.get(rowIndex)[columnIndex];
+        }
+        return null;
     }
     private void clearBackUp() {
         this.backUp.clear();
@@ -105,12 +108,6 @@ public class CustomTableModel extends AbstractTableModel {
     }
     public void clearData(){
         data.clear();
-    }
-    public void removeRow(int row){
-        if (data.get(row)[GeneralVars.VAR_COUNT - 1].toString().equals(curUser)){
-            data.remove(row);
-            this.fireTableDataChanged();
-        }
     }
 
     public void setCurUser(String curUser) {
@@ -208,5 +205,8 @@ public class CustomTableModel extends AbstractTableModel {
         dataCopy = null;
         sortedColumn = -1;
         sortOrder = SortOrder.ASCENDING;
+    }
+    private int getDataSize(){
+        return data.size();
     }
 }

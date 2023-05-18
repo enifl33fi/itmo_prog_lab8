@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public abstract class AbstractValidator implements ValidatorInterface {
     @Override
@@ -29,7 +30,8 @@ public abstract class AbstractValidator implements ValidatorInterface {
         try{
             return Integer.parseInt(intToValidate);
         } catch (NumberFormatException e){
-            throw new NumberFormatException("must be int " + (canBeNull ? "or empty":""));
+            ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+            throw new NumberFormatException(r.getString("intParseException") + (canBeNull ? r.getString("orEmpty"):""));
         }
     }
     @Override
@@ -43,7 +45,8 @@ public abstract class AbstractValidator implements ValidatorInterface {
         try{
             return Double.parseDouble(doubleToValidate);
         } catch (NumberFormatException e){
-            throw new NumberFormatException("must be double " + (canBeNull ? "or empty":""));
+            ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+            throw new NumberFormatException(r.getString("doubleParseException") + (canBeNull ? r.getString("orEmpty"):""));
         }
     }
     @Override
@@ -65,7 +68,9 @@ public abstract class AbstractValidator implements ValidatorInterface {
         try {
             return Long.parseLong(longToValidate);
         }  catch (NumberFormatException e){
-            throw new NumberFormatException("must be long " + (canBeNull ? "or empty":""));
+            ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.Exceptions");
+
+            throw new NumberFormatException(r.getString("doubleParseException") + (canBeNull ? r.getString("orEmpty"):""));
         }
     }
 }

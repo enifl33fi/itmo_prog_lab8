@@ -67,7 +67,7 @@
         <properties>
           <background color="-1"/>
         </properties>
-        <border type="none"/>
+        <border type="none" title=""/>
         <children>
           <component id="2ad4e" class="custom.CustomTextField" binding="nameField" custom-create="true">
             <constraints>

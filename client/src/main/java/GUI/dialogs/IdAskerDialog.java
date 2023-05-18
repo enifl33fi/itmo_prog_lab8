@@ -10,6 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ResourceBundle;
 
 public class IdAskerDialog extends JDialog implements SizedWindow {
     private JPanel contentPane;
@@ -20,6 +21,7 @@ public class IdAskerDialog extends JDialog implements SizedWindow {
 
     public IdAskerDialog(Request request, WorkingWindow workingWindow) {
         this.req = request;
+        switchLanguage();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -77,6 +79,16 @@ public class IdAskerDialog extends JDialog implements SizedWindow {
     private void checkId(WorkingWindow workingWindow){
         String result = workingWindow.checkId(idInputField.getInputField().getText());
         idInputField.getWarnMsg().setText(result);
+    }
+    private void switchLanguage(){
+        ResourceBundle r = ResourceBundle.getBundle("GUI.bundles.ElementDialog");
+        fillLabels(r);
+
+    }
+    private void fillLabels(ResourceBundle r){
+        idInputField.setHelpMsg(r.getString("field") +r.getString("idField"));
+        buttonOK.setText(r.getString("okButton"));
+        buttonCancel.setText(r.getString("cancelButton"));
     }
 
 

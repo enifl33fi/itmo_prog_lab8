@@ -14,7 +14,7 @@ public class CheckIdCommand extends Command {
     }
     @Override
     public Response execute(Request req) {
-        Response res = new Response("Incorrect request1.");
+        Response res = new Response("Incorrect request.");
         try {
             if (this.usersCol.checkUser(req.getUserContainer())){
                 if (req.hasArg() && !req.hasElement()){

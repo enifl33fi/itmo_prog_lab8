@@ -1,8 +1,10 @@
 package GUI.startPage;
 
-import GUI.WorkingWindow;
 import GUI.WorkingWindowAdapter;
 import client.Client;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class StartPageLogic extends WorkingWindowAdapter {
     private final StartPageModel model = new StartPageModel(this);
@@ -22,7 +24,7 @@ public class StartPageLogic extends WorkingWindowAdapter {
     }
     @Override
     public void setIt(){
+        model.switchLanguage();
         model.setVisible(true);
     }
-
 }

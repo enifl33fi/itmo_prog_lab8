@@ -4,7 +4,6 @@ import element.CollectionPart;
 import network.requests.Request;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.LinkedList;
 
 public interface WorkingWindow extends SizedWindow{

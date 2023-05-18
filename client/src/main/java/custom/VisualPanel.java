@@ -7,13 +7,15 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VisualPanel extends JPanel {
 
-    private final List<PaintComponent> visualComponents;
+    private final CopyOnWriteArrayList<PaintComponent> visualComponents;
 
     public VisualPanel(){
-        visualComponents = new LinkedList<>();
+        visualComponents = new CopyOnWriteArrayList<>();
         setBorder(new AbstractBorder() {
             @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
@@ -58,7 +60,7 @@ public class VisualPanel extends JPanel {
     private void addPaintComponent(PaintComponent component){
         new Thread(() -> {
             int size = component.getPrefSize();
-            for (int i = 0; i < size; i++){
+            for (int i = 0; i <= size; i++){
                 component.setSize(i);
                 this.repaint();
                 try {
@@ -76,5 +78,11 @@ public class VisualPanel extends JPanel {
             }
         }
         return false;
+    }
+    public PaintComponent getSelected(int xMouse, int yMouse){
+        Optional<PaintComponent> elem = visualComponents.stream()
+                .filter((component -> component.isSelected(xMouse, yMouse)))
+                .findFirst();
+        return elem.orElse(null);
     }
 }
