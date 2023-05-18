@@ -1,0 +1,12 @@
+package network;
+
+public enum ResponseType {
+    EXECUTION_EXCEPTION,
+    DATABASE_EXCEPTION,
+    ALGORITHM_EXCEPTION,
+    INCORRECT_REQUEST,
+    NO_SUCH_ID,
+    NOT_OWNER,
+    EMPTY_COLLECTION,
+    OK;
+}
